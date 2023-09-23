@@ -1,23 +1,36 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Clima from './Clima/Clima';
+import Transporte from './Transporte/Transporte';
 
 function App() {
+  const datosClima = {
+    ciudad: 'Buenos Aires',
+    temperatura: 25,
+    fecha: "15 agosto",
+    hora: 17,
+    humedad: 60,
+    visibilidad: 10,
+    viento: 10,
+    aire: "buena",
+    salida: 7.01,
+    puesta: 19.05,
+    minima: 5,
+    maxima: 10,
+    porhora: 10,
+  };
+
+  const datosTransporte = {
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="clima-container">
+        <Clima {...datosClima} />
+      </div>
+      <div className="transporte-container">
+        <Transporte {...datosTransporte} />
+      </div>
     </div>
   );
 }
