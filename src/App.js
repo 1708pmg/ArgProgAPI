@@ -4,22 +4,11 @@ import Clima from './Clima/Clima';
 import Transporte from './Transporte/Transporte';
 
 function App() {
+  // Datos para el clima
   const datosClima = {
-    ciudad: 'Buenos Aires',
-    temperatura: 25,
-    fecha: "15 agosto",
-    hora: 17,
-    humedad: 60,
-    visibilidad: 10,
-    viento: 10,
-    aire: "buena",
-    salida: 7.01,
-    puesta: 19.05,
-    minima: 5,
-    maxima: 10,
-    porhora: 10,
   };
 
+  
   const datosTransporte = {
   };
 
@@ -36,3 +25,4 @@ function App() {
 }
 
 export default App;
+

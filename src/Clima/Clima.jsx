@@ -1,38 +1,65 @@
 import React from 'react';
+import InfoCiudad from './InfoCiudad'; 
+import InfoDetalladaClima from './InfoDetalladaClima';
+import InfoGeneralClima from './InfoGeneralClima';
+import SalidaPuestaSol from './SalidaPuestaSol'; 
+import TemperaturaMinMax from './TemperaturaMinMax'; 
+import TemperaturaPorHora from './TemperaturaPorHora';
 
-function Clima(props) {
+function Clima() {
+  const datosClima = {
+    ciudad: 'Buenos Aires',
+    temperatura: 25,
+    fecha: "15 agosto",
+    hora: 17,
+    humedad: 60,
+    visibilidad: 10,
+    viento: 10,
+    aire: "buena",
+    salida: 7.01,
+    puesta: 19.05,
+    minima: 5,
+    maxima: 10,
+    /*porhora: 10,*/
+  };
+
+  const datosPorHora = [
+    { hora: '1 AM', temperatura: 18 },
+    { hora: '2 AM', temperatura: 19 },
+    { hora: '3 AM', temperatura: 20 },
+    { hora: '4 AM', temperatura: 20 },
+    { hora: '5 AM', temperatura: 20 },
+    { hora: '6 AM', temperatura: 21 },
+    { hora: '7 AM', temperatura: 21 },
+    { hora: '8 AM', temperatura: 22 },
+    { hora: '9 AM', temperatura: 22 },
+    { hora: '10 AM', temperatura: 23 },
+    { hora: '11 AM', temperatura: 24 },
+    { hora: '12 AM', temperatura: 25 },
+    { hora: '1 PM', temperatura: 26 },
+    { hora: '2 PM', temperatura: 27 },
+    { hora: '4 PM', temperatura: 28 },
+    { hora: '5 PM', temperatura: 28 },
+    { hora: '6 PM', temperatura: 28 },
+    { hora: '7 PM', temperatura: 27 },
+    { hora: '8 PM', temperatura: 27 },
+    { hora: '9 PM', temperatura: 25 },
+    { hora: '10 PM', temperatura: 25 },
+    { hora: '11 PM', temperatura: 25 },
+    { hora: '12 PM', temperatura: 25 },
+    
+
+    
+  ];
+
   return (
     <div className="clima-container">
-      <h2>Clima en {props.ciudad}</h2>
-
-        <div id='datos'>
-        <p className='actual'>Temperatura actual: {props.temperatura}°C</p>
-        <p className='fecha'>Fecha: {props.fecha} </p>
-        <p className='hora'>Hora: {props.hora} hs</p>
-        </div>
-
-        <div id="items">
-        <p className='humedad'>Humedad: {props.humedad}%</p>
-        <p className='visibilidad'>Visibilidad: {props.visibilidad} Km</p>
-        <p className='viento'>Viento: {props.viento} km por hora</p>
-        <p className='aire'>Calidad del aire: {props.aire}</p>
-
-          <div id= "sol">
-          <p>Salida del sol: {props.salida}hs</p>
-          <p>Puesta del sol: {props.puesta}hs</p>
-          </div>
-
-          <div id="temp">
-          <p>Temperatura Minima: {props.minina} °</p> 
-          <p>Temperatura Maxima: {props.maxima} °</p>
-          </div>
-        
-        </div>
-
-        <div id= "porHora">
-        <p>Temperatura por hora: {props.porhora} °</p>
-        </div>
-      
+      <InfoCiudad ciudad={datosClima.ciudad} />
+      <InfoGeneralClima temperatura={datosClima.temperatura} fecha={datosClima.fecha} hora={datosClima.hora} />
+      <InfoDetalladaClima humedad={datosClima.humedad} visibilidad={datosClima.visibilidad} viento={datosClima.viento} aire={datosClima.aire}/>
+      <SalidaPuestaSol salida={datosClima.salida} puesta={datosClima.puesta} />
+      <TemperaturaMinMax minima={datosClima.minima} maxima={datosClima.maxima} />
+      <TemperaturaPorHora datosPorHora={datosPorHora} />
     </div>
   );
 }
