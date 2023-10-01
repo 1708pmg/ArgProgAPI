@@ -33,8 +33,9 @@
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  background-color: cornsilk;
 }
-.info-detallada,
+.info-detallada, 
 .salida-puesta,
 .temp-min-max {
   flex: 1;
@@ -43,6 +44,11 @@
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  background-color: cornsilk;
+}
+
+.icon {
+  width: 10 px;
 }
 
 .temperatura-por-hora {
@@ -53,15 +59,30 @@
   padding: 10px;
   border-radius: 5px;
   margin: 10px;
+  background-color: cornsilk;
+  overflow-x: auto; /* Agrega un scroll horizontal */
+  white-space: nowrap; /* Evita el salto de línea */
 }
 
 .lista-temperaturas {
-  list-style-type: none;
-  padding: 50;
+  display: flex;
+  gap: 10px;
+  padding: 5px;
+  min-width: 300px;
+  margin-top: 10px;
+  overflow-x: auto; /* Agrega un scroll horizontal */
+  white-space: nowrap; /* Evita el salto de línea */
+  background-color: rgb(19, 21, 114);
+  border-radius: 5px;
 }
 
 .temperatura-hora {
-  margin: 5px 0;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: cornsilk;
 }
+
 
 

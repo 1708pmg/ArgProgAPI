@@ -22,9 +22,13 @@ function Clima() {
     maxima: 10,
     /*porhora: 10,*/
   };
-
+  /*const datosPorHora=json.hourly.time [0]
+  const temperaturaPorHora=json.hourly.temperature_2m*/
   const datosPorHora = [
-    { hora: '1 AM', temperatura: 18 },
+    /*{ hora: json.hourly.time[1], temperatura: json.hourly.temperature_2m[1]},*/
+    /*  */
+    { hora: '0 AM', temperatura: 19 },
+    { hora: '1 AM', temperatura: 19 },
     { hora: '2 AM', temperatura: 19 },
     { hora: '3 AM', temperatura: 20 },
     { hora: '4 AM', temperatura: 20 },
@@ -46,11 +50,9 @@ function Clima() {
     { hora: '9 PM', temperatura: 25 },
     { hora: '10 PM', temperatura: 25 },
     { hora: '11 PM', temperatura: 25 },
-    { hora: '12 PM', temperatura: 25 },
-    
-
     
   ];
+  
 
   return (
     <div className="clima-container">

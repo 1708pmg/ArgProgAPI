@@ -1,18 +1,19 @@
 import React from 'react';
 
-function TemperaturaPorHora(props) {
-  const { datosPorHora } = props; 
+
+function TemperaturaPorHora({ datosPorHora }) {
+ 
 
   return (
     <div className="temperatura-por-hora">
       <h3>Temperatura por Hora</h3>
-      <ul className="lista-temperaturas">
+      <div className="lista-temperaturas">
         {datosPorHora.map((hora, index) => (
-          <li key={index} className="temperatura-hora">
+          <div key={index} className="temperatura-hora">
             {hora.hora}: {hora.temperatura}°C
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
