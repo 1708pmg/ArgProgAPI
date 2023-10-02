@@ -34,8 +34,49 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: cornsilk;
+  align-items: center;
+  gap: 5px;
 }
-.info-detallada, 
+
+.fecha-hora-container {
+  display: flex;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  background-color: cornsilk;
+  border-radius: 5px;
+}
+
+.info-detallada{
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  background-color: cornsilk;
+  border-radius: 5px;
+} 
+
+.humedad,
+.visibilidad,
+.viento,
+.aire {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 300px;
+  text-align: center;
+  background-color: #f4f4f4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
 .salida-puesta,
 .temp-min-max {
   flex: 1;
@@ -45,11 +86,60 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: cornsilk;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #ddd;
+}*/
+
+.sol-info {
+  min-width: 300px;
+  display: grid;
+  grid-template-columns:1fr, 1fr ;
+  align-items: center;
+}
+
+.salida-sol{
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 300px;
+  text-align: center;
+  background-color: #f4f4f4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.puesta-sol {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 300px;
+  text-align: center;
+  background-color: #f4f4f4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
 .icon {
-  width: 10 px;
+  width: 50px; /* Ajusta el tamaño según sea necesario */
+  height: 50px; /* Ajusta el tamaño según sea necesario */
 }
+
+.temp-min,
+.temp-max{
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 300px;
+  text-align: center;
+  background-color: #f4f4f4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
 
 .temperatura-por-hora {
   flex: 1;
@@ -72,7 +162,7 @@
   margin-top: 10px;
   overflow-x: auto; /* Agrega un scroll horizontal */
   white-space: nowrap; /* Evita el salto de línea */
-  background-color: rgb(19, 21, 114);
+  background-color: rgb(7, 100, 27);
   border-radius: 5px;
 }
 

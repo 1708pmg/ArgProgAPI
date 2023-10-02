@@ -10,8 +10,8 @@ function Clima() {
   const datosClima = {
     ciudad: 'Buenos Aires',
     temperatura: 25,
-    fecha: "15 agosto",
-    hora: 17,
+    fecha: "15 setiembre 2023", 
+    hora: "17.00",
     humedad: 60,
     visibilidad: 10,
     viento: 10,
