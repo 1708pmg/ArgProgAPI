@@ -1,13 +1,18 @@
 {
   "files": {
-    "main.css": "/ArgProgAPI/static/css/main.ca743e99.css",
-    "main.js": "/ArgProgAPI/static/js/main.23bf211d.js",
+    "main.css": "/ArgProgAPI/static/css/main.79a9d060.css",
+    "main.js": "/ArgProgAPI/static/js/main.4e82ce12.js",
+    "static/media/calidadAire.png": "/ArgProgAPI/static/media/calidadAire.3c39467327f619e16068.png",
+    "static/media/termometro.png": "/ArgProgAPI/static/media/termometro.270313f2e3572dc1418e.png",
+    "static/media/humedad.svg": "/ArgProgAPI/static/media/humedad.e9368db8af6df25ac07d6751f01a4b74.svg",
+    "static/media/visibilidad.svg": "/ArgProgAPI/static/media/visibilidad.b7c844900e49769f03012f0487f64022.svg",
+    "static/media/viento.svg": "/ArgProgAPI/static/media/viento.6c51ae8649da1a10970f629efbcaebd1.svg",
     "index.html": "/ArgProgAPI/index.html",
-    "main.ca743e99.css.map": "/ArgProgAPI/static/css/main.ca743e99.css.map",
-    "main.23bf211d.js.map": "/ArgProgAPI/static/js/main.23bf211d.js.map"
+    "main.79a9d060.css.map": "/ArgProgAPI/static/css/main.79a9d060.css.map",
+    "main.4e82ce12.js.map": "/ArgProgAPI/static/js/main.4e82ce12.js.map"
   },
   "entrypoints": [
-    "static/css/main.ca743e99.css",
-    "static/js/main.23bf211d.js"
+    "static/css/main.79a9d060.css",
+    "static/js/main.4e82ce12.js"
   ]
 }
