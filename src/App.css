@@ -123,7 +123,7 @@
 }
 
 .icon {
-  width: 50px;
+  width: 50px; 
   height: 50px; 
 }
 
@@ -150,11 +150,26 @@
   border-radius: 5px;
   margin: 10px;
   background-color: cornsilk;
-  overflow-x: auto;
+  overflow-x: auto; 
   white-space: nowrap;
 }
 
 .lista-temperaturas {
   display: flex;
   gap: 10px;
+  padding: 5px;
+  min-width: 300px;
+  margin-top: 10px;
+  overflow-x: auto; 
+  white-space: nowrap; 
+  background-color: rgb(7, 100, 27);
+  border-radius: 5px;
+}
+
+.temperatura-hora {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: cornsilk;
 }
