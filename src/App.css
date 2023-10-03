@@ -38,6 +38,22 @@
   gap: 5px;
 }
 
+.icon {
+  width: 40px;  
+}
+
+.icon-temp {
+width: 80px;
+}
+
+.info-general{
+display: flex;
+font-style:normal ;
+font-size: xx-large;
+align-items: center;
+
+}
+
 .fecha-hora-container {
   display: flex;
   grid-template-columns: 1fr;
@@ -120,11 +136,6 @@
   background-color: #f4f4f4;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
-}
-
-.icon {
-  width: 50px; 
-  height: 50px; 
 }
 
 .temp-min,
