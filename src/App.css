@@ -89,7 +89,7 @@
   justify-content: space-around;
   align-items: center;
   border: 1px solid #ddd;
-}*/
+}
 
 .sol-info {
   min-width: 300px;
@@ -123,8 +123,8 @@
 }
 
 .icon {
-  width: 50px; /* Ajusta el tamaño según sea necesario */
-  height: 50px; /* Ajusta el tamaño según sea necesario */
+  width: 50px;
+  height: 50px; 
 }
 
 .temp-min,
@@ -150,29 +150,11 @@
   border-radius: 5px;
   margin: 10px;
   background-color: cornsilk;
-  overflow-x: auto; /* Agrega un scroll horizontal */
-  white-space: nowrap; /* Evita el salto de línea */
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .lista-temperaturas {
   display: flex;
   gap: 10px;
-  padding: 5px;
-  min-width: 300px;
-  margin-top: 10px;
-  overflow-x: auto; /* Agrega un scroll horizontal */
-  white-space: nowrap; /* Evita el salto de línea */
-  background-color: rgb(7, 100, 27);
-  border-radius: 5px;
 }
-
-.temperatura-hora {
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-  background-color: cornsilk;
-}
-
-
-
