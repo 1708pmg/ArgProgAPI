@@ -1,5 +1,5 @@
 {
-    "weatherCodeInfo": [
+    "weatherCodeInfo": 
         {
             "0": {
                 "name": "Despejado",
@@ -114,5 +114,4 @@
                 "image_src": "https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/extreme-hail.svg"
             }
         }
-    ]
-}
+    }

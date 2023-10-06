@@ -12,6 +12,8 @@
   background-color: aquamarine;
   flex-wrap: wrap;
   justify-content: space-between;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: large;
 }
 
 .transporte-container {
@@ -25,8 +27,7 @@
 }
 
 
-.info-ciudad,
-.info-general {
+.info-ciudad{
   flex: 1;
   min-width: 300px;
   margin: 10px;
@@ -36,6 +37,33 @@
   background-color: cornsilk;
   align-items: center;
   gap: 5px;
+}
+.info-general {
+  display: flex;
+  justify-content: space-between;
+  min-width: 300px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color:cornflowerblue;
+  align-items: center;
+  gap: 5px;
+}
+
+.column {
+  flex: 1;
+  margin: 0 10px;
+}
+
+.icon-temp {
+  width: 30px; 
+  height: auto;
+  margin-right: 5px;
+}
+
+.icon-clima {
+  width: 80px;
 }
 
 .icon {
@@ -49,22 +77,27 @@ width: 80px;
 .info-general{
 display: flex;
 font-style:normal ;
-font-size: xx-large;
+font-size: x-large;
 align-items: center;
 
 }
 
 .fecha-hora-container {
   display: flex;
-  grid-template-columns: 1fr;
   align-items: center;
-  gap: 5px;
+  flex-direction: column;
   border: 1px solid #ddd;
   padding: 10px;
   margin: 10px;
   background-color: cornsilk;
   border-radius: 5px;
+  
+
 }
+.fecha, 
+.hora {
+  margin: 2px;
+ }
 
 .info-detallada{
   display: grid;
