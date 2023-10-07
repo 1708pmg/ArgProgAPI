@@ -28,7 +28,7 @@ function InfoGeneralClima() {
         <div className='column'>
           <p className='actual'>
             <img src={termometro} alt="Icono de Temperatura" className='icon-temp' />
-            `${temperaturaPorHora} °C`
+            ${temperaturaPorHora} °C
           </p>
           <h4>Temperatura actual</h4>
         </div>
