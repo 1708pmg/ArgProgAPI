@@ -1,125 +1,116 @@
 .App {
   display: flex;
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .clima-container {
   flex: 1;
   min-width: 50%;
   min-height: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 0.25%;
+  border: 0.25vh solid #ccc;
   box-sizing: border-box;
   background-color: aquamarine;
   flex-wrap: wrap;
   justify-content: space-between;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: large;
+  font-size:medium;
 }
 
 .transporte-container {
   flex: 1;
   min-width: 50%;
   min-height: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 0.5%;
+  border: 0.25vh solid #ccc;
   box-sizing: border-box;
   background-color:bisque;
 }
 
 
-.info-ciudad{
+.ciudad,
+.fecha-hora {
   flex: 1;
   min-width: 300px;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
+  margin:0.25%;
+  padding: 0.25%;
+  border: 0.25vh solid #ddd;
   border-radius: 5px;
   background-color: cornsilk;
-  align-items: center;
-  gap: 5px;
-}
-.info-general {
-  display: flex;
-  justify-content: space-between;
-  min-width: 300px;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color:cornflowerblue;
-  align-items: center;
-  gap: 5px;
+  text-align: center;
+  gap: 1%;
 }
 
-.column {
-  flex: 1;
-  margin: 0 10px;
+.info-general {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25%;
+  /*border: 1px solid #ddd;
+  padding: 0.10%;
+  margin: 0.25%;
+  background-color: cornsilk;
+  border-radius: 5px;*/
+} 
+.temperatura,
+.estado{
+  margin: auto;
+  ;
 }
+  .temp-actual,
+  .estado-clima{
+  padding:0,25%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #3c99d6;
+  }
 
 .icon-temp {
-  width: 30px; 
+  width: 20%; 
   height: auto;
   margin-right: 5px;
 }
 
 .icon-clima {
-  width: 80px;
+  width: 20%;
 }
 
 .icon {
-  width: 40px;  
+  width: 15%;  
 }
 
-.icon-temp {
-width: 80px;
+.icon-amanecer,
+.icon-atardecer{
+  width: 10%;
 }
-
-.info-general{
-display: flex;
-font-style:normal ;
-font-size: x-large;
-align-items: center;
+.icon-min,
+.icon-max{
+  width: 12%;
 
 }
-
-.fecha-hora-container {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px;
-  background-color: cornsilk;
-  border-radius: 5px;
-  
-
-}
-.fecha, 
-.hora {
-  margin: 2px;
- }
-
 .info-detallada{
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   align-items: center;
-  gap: 10px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px;
+  gap: 0.10%;
+  /*border: 1px solid #ddd;
+  padding: 0.10%;
+  margin: 0.25%;
   background-color: cornsilk;
-  border-radius: 5px;
+  border-radius: 5px;*/
 } 
 
 .humedad,
 .visibilidad,
 .viento,
 .aire {
-  margin-bottom: 10px;
-  padding: 10px;
+  margin-bottom: 0.25%;
+  padding: 0.25%;
   border: 1px solid #ccc;
   border-radius: 5px;
-  min-width: 300px;
+  min-width: 50%;
   text-align: center;
   background-color: #f4f4f4;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -128,43 +119,30 @@ align-items: center;
 
 .salida-puesta,
 .temp-min-max {
-  flex: 1;
-  min-width: 300px;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: cornsilk;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
-  border: 1px solid #ddd;
+  gap: 0.25%;
+  /*border: 1px solid #ddd;
+  padding: 0.25%;
+  margin: 0.25%;
+  background-color: cornsilk;
+  border-radius: 5px;*/
 }
 
 .sol-info {
-  min-width: 300px;
   display: grid;
-  grid-template-columns:1fr, 1fr ;
+  grid-template-columns:repeat (2, 1fr );
   align-items: center;
 }
 
-.salida-sol{
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  min-width: 300px;
-  text-align: center;
-  background-color: #f4f4f4;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
-}
-
+.salida-sol,
 .puesta-sol {
-  margin-bottom: 10px;
-  padding: 10px;
+  margin-bottom: 0.25%;
+  padding: 0.25%;
   border: 1px solid #ccc;
   border-radius: 5px;
-  min-width: 300px;
+  min-width: 50%;
   text-align: center;
   background-color: #f4f4f4;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -173,47 +151,49 @@ align-items: center;
 
 .temp-min,
 .temp-max{
-  margin-bottom: 10px;
-  padding: 10px;
+  margin-bottom: 0.25%;
+  padding: 0.25%;
   border: 1px solid #ccc;
   border-radius: 5px;
-  min-width: 300px;
+  min-width: 150px;
   text-align: center;
   background-color: #f4f4f4;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
 }
 
 
 .temperatura-por-hora {
   flex: 1;
-  min-width: 300px;
-  margin: 10px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-  margin: 10px;
+  display: flexbox;
+  min-width:auto;
+  gap:0.25%;
+  /*border: 1px solid #ddd;
+  padding: 0.10%;
+  border-radius:2%;
+  margin: 0.25%;
   background-color: cornsilk;
-  overflow-x: auto; 
-  white-space: nowrap;
+  overflow-x: auto; */
 }
 
 .lista-temperaturas {
   display: flex;
-  gap: 10px;
-  padding: 5px;
-  min-width: 300px;
-  margin-top: 10px;
-  overflow-x: auto; 
-  white-space: nowrap; 
-  background-color: rgb(7, 100, 27);
-  border-radius: 5px;
+  gap:2.7%;
+  padding: 0.5%;
+  min-width: 60%;
+  margin-top: 3%;
+  overflow-x: auto;
+  white-space: nowrap;
+  background-color: rgb(118, 96, 153);
+  border-radius: 2%;
 }
 
 .temperatura-hora {
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-self:self-end;
+  border: 2% solid #b16430;
+  padding: 1%;
+  border-radius: 2%;
+  text-align:end;
   background-color: cornsilk;
+  font-size: small;
 }

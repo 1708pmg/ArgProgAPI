@@ -8,8 +8,8 @@ function TemperaturaMinMax(props) {
   return (
     <div className="temp-min-max">
 
-      <p className='temp-min'><img src={tempmin} alt='Icon Temperatura Minima ' className='icon' />Temperatura Minima: {datosApi.daily.temperature_2m_min} °</p>
-      <p className='temp-max'><img src={tempmax} alt='Icon Temperatura Maxima ' className='icon' />Temperatura Maxima: {datosApi.daily.temperature_2m_max} °</p>
+      <p className='temp-min'><img src={tempmin} alt='Icon Temperatura Minima ' className='icon-min' />Temperatura Minima: {datosApi.daily.temperature_2m_min} °</p>
+      <p className='temp-max'><img src={tempmax} alt='Icon Temperatura Maxima ' className='icon-max' />Temperatura Maxima: {datosApi.daily.temperature_2m_max} °</p>
 
     </div>
   );

@@ -12,14 +12,14 @@ function SalidaPuestaSol(props) {
     <div className="salida-puesta">
       <div className='sol-info'>
         <p className='salida-sol'>
-          <img src={amanecer} alt="Amanecer Icon" className="icon" />
+          <img src={amanecer} alt="Amanecer Icon" className="icon-amanecer" />
           Salida del sol: {salidaSolFormatoHora} .
         </p>
       </div>
 
       <div className='sol-info'>
         <p className='puesta-sol'>
-          <img src={atardecer} alt="Atardecer Icon" className="icon" />
+          <img src={atardecer} alt="Atardecer Icon" className="icon-atardecer" />
           Puesta del sol: {puestaSolFormatoHora} .
         </p>
       </div>

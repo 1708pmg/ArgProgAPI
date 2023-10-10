@@ -2,7 +2,7 @@ import React from 'react';
 import termometro from './Imagenes/termometro.png';
 import datosApi from './api.json';
 import weatherCodeInfo from './IconClima.json';
-import { formatearFechaYHora } from './formatearFechaYHora';
+/*import { formatearFechaYHora } from './formatearFechaYHora';*/
 
 function obtenerTemperaturaPorHora(tiempo) {
   // Buscar el índice en el array hourly.time que coincide con el tiempo proporcionado
@@ -15,8 +15,8 @@ function obtenerTemperaturaPorHora(tiempo) {
 function InfoGeneralClima() {
   const weatherCode = datosApi.daily.weathercode[0].toString();
   const weatherCondition = weatherCodeInfo["weatherCodeInfo"][weatherCode];
-  const fechaApi = new Date(datosApi.current_weather.time);
-  const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);
+  /*const fechaApi = new Date(datosApi.current_weather.time);*/
+  /* const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);*/
 
   // Obtener la temperatura correspondiente a un tiempo específico (por ejemplo, "2023-10-03T21:00")
   const tiempoEspecifico = "2023-10-03T21:00";
@@ -25,28 +25,20 @@ function InfoGeneralClima() {
   return (
     <>
       <div className='info-general'>
-        <div className='column'>
-          <p className='actual'>
+        <div >
+          <h5 className="temperatura">Temperatura actual</h5>
+          <p className='temp-actual'>
             <img src={termometro} alt="Icono de Temperatura" className='icon-temp' />
-            ${temperaturaPorHora} °C
+            {temperaturaPorHora} °C
           </p>
-          <h4>Temperatura actual</h4>
         </div>
-        <div className='column'>
+
+        <div >
+          <h5 className='estado'>Estado del clima</h5>
           <p className='estado-clima'>
             {weatherCondition?.name}
             <img src={weatherCondition?.image_src} alt={weatherCondition?.name} className='icon-clima' />
-            <h4>Estado del clima</h4>
           </p>
-        </div>
-      </div>
-
-      <div className="fecha-hora-container">
-        <div className="fecha">
-          <p>{formatoFecha}</p>
-        </div>
-        <div className="hora">
-          <p>{formatoHora}</p>
         </div>
       </div>
     </>
