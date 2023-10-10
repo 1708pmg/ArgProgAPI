@@ -46,11 +46,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.25%;
-  /*border: 1px solid #ddd;
-  padding: 0.10%;
-  margin: 0.25%;
-  background-color: cornsilk;
-  border-radius: 5px;*/
 } 
 .temperatura,
 .estado{
@@ -95,11 +90,6 @@
   grid-template-rows: repeat(2, 1fr);
   align-items: center;
   gap: 0.10%;
-  /*border: 1px solid #ddd;
-  padding: 0.10%;
-  margin: 0.25%;
-  background-color: cornsilk;
-  border-radius: 5px;*/
 } 
 
 .humedad,
@@ -123,11 +113,6 @@
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   gap: 0.25%;
-  /*border: 1px solid #ddd;
-  padding: 0.25%;
-  margin: 0.25%;
-  background-color: cornsilk;
-  border-radius: 5px;*/
 }
 
 .sol-info {
@@ -155,7 +140,7 @@
   padding: 0.25%;
   border: 1px solid #ccc;
   border-radius: 5px;
-  min-width: 150px;
+  min-width: 50%;
   text-align: center;
   background-color: #f4f4f4;
 }
@@ -166,12 +151,6 @@
   display: flexbox;
   min-width:auto;
   gap:0.25%;
-  /*border: 1px solid #ddd;
-  padding: 0.10%;
-  border-radius:2%;
-  margin: 0.25%;
-  background-color: cornsilk;
-  overflow-x: auto; */
 }
 
 .lista-temperaturas {
