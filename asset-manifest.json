@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/ArgProgAPI/static/css/main.e9dfc53f.css",
+    "main.css": "/ArgProgAPI/static/css/main.2fe7a6d5.css",
     "main.js": "/ArgProgAPI/static/js/main.d0063189.js",
     "static/media/calidadAire.png": "/ArgProgAPI/static/media/calidadAire.3c39467327f619e16068.png",
     "static/media/termometro.png": "/ArgProgAPI/static/media/termometro.270313f2e3572dc1418e.png",
@@ -8,11 +8,11 @@
     "static/media/visibilidad.svg": "/ArgProgAPI/static/media/visibilidad.b7c844900e49769f03012f0487f64022.svg",
     "static/media/viento.svg": "/ArgProgAPI/static/media/viento.6c51ae8649da1a10970f629efbcaebd1.svg",
     "index.html": "/ArgProgAPI/index.html",
-    "main.e9dfc53f.css.map": "/ArgProgAPI/static/css/main.e9dfc53f.css.map",
+    "main.2fe7a6d5.css.map": "/ArgProgAPI/static/css/main.2fe7a6d5.css.map",
     "main.d0063189.js.map": "/ArgProgAPI/static/js/main.d0063189.js.map"
   },
   "entrypoints": [
-    "static/css/main.e9dfc53f.css",
+    "static/css/main.2fe7a6d5.css",
     "static/js/main.d0063189.js"
   ]
 }
