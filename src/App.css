@@ -11,7 +11,7 @@
     font-family: Arial,Helvetica,sans-serif;
     font-size: medium;
     justify-content: space-between;
-    padding: .25%
+    padding: .5%
 }
 
 .clima-container,.transporte-container {
@@ -160,3 +160,8 @@
     padding: 1%;
     text-align:center;
 }
+
+.leaflet-container {
+    width: 100wh; 
+    height: 100vh;
+  }

@@ -11,12 +11,12 @@ if (!weatherData) {
   return <p>Datos meteorológicos no válidos</p>;
 }
 
-const datosPorHora = weatherData.hourly && weatherData.hourly.time
+/*const datosPorHora = weatherData.hourly && weatherData.hourly.time
   ? weatherData.hourly.time.map((hora, index) => ({
     hora,
     temperatura: weatherData.hourly.temperature_2m[index],
   }))
-  : [];
+  : [];*/
 
 return (
   <div className="clima-container">
