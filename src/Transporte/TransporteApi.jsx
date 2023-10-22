@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet'; 
 import LineaColectivoDropdown from './LineaColectivoDropdown';
 import transportData from '../data/transportData.json';
 
@@ -7,6 +8,7 @@ const TransporteApi = () => {
   const [selectedLinea, setSelectedLinea] = useState('');
 
   const position = [-34.61315, -58.37723];
+  let cityPosition = position
 
   // Obtener todas las lineas únicas
   const lineas = Array.from(new Set(transportData.map((linea) => linea.route_short_name)));
@@ -16,12 +18,20 @@ const TransporteApi = () => {
     : transportData;
 
   useEffect(() => {
-    // Puedes agregar aquí lógica adicional si es necesario
-  }, []); // Puedes eliminar el array de dependencias si solo quieres que se ejecute una vez
+    // AGREGAR LAS LOGICA DE LA API Y AGREGAR  SERINTERVAL
+  }, []);
+
+  // Icono personalizado para el marcador
+  const busIcon = new L.Icon({
+    iconUrl:'https://cdn-icons-png.flaticon.com/512/1042/1042266.png',
+    iconSize: [25, 25],
+    iconAnchor: [12, 12],
+    popupAnchor: [1, -34],
+  });
 
   return (
     <div className="transporte-container">
-      <h4>Transporte en Ciudad de Buenos Aires</h4>
+      <h4 className='ciudad-transporte'>Transporte en Ciudad de Buenos Aires</h4>
 
       <LineaColectivoDropdown lineas={lineas} onSelectLinea={setSelectedLinea} />
 
@@ -30,11 +40,20 @@ const TransporteApi = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <Marker position={cityPosition}>
+          <Popup>
+            Ciudad de Buenos Aires.
+          </Popup>
+        </Marker>
+
         {filteredTransportData &&
           filteredTransportData.map((linea) => (
+
             <Marker
               key={linea.route_id}
               position={[linea.latitude, linea.longitude]}
+              icon={busIcon}
+
             >
               <Popup>
                 <p>Línea: {linea.route_short_name}</p>
@@ -48,6 +67,79 @@ const TransporteApi = () => {
 };
 
 export default TransporteApi;
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+/*import L from 'leaflet'; 
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import transportData from '../data/transportData.json';
+
+const TransporteApi = () => {
+  const [selectedLinea, setSelectedLinea] = useState('');
+
+  const position = [-34.61315, -58.37723];
+  let cityPosition = position
+
+  // Obtener todas las lineas únicas
+  const lineas = Array.from(new Set(transportData.map((linea) => linea.route_short_name)));
+
+  const filteredTransportData = selectedLinea
+    ? transportData?.filter((linea) => linea.route_short_name === selectedLinea)
+    : transportData;
+
+  useEffect(() => {
+    // AGREGAR LAS LOGICA DE LA API Y AGREGAR  SERINTERVAL
+  }, []); 
+
+  return (
+    <div className="transporte-container">
+      <h4 className='ciudad-transporte'>Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown lineas={lineas} onSelectLinea={setSelectedLinea} />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>
+            Ciudad de Buenos Aires.
+          </Popup>
+        </Marker>
+
+        {filteredTransportData &&
+          filteredTransportData.map((linea) => (
+
+            <Marker
+              key={linea.route_id}
+              position={[linea.latitude, linea.longitude]}
+              icon={{
+                  iconUrl: '<a href="https://www.flaticon.es/iconos-gratis/autobus" title="autobús iconos">Autobús iconos creados por Freepik - Flaticon</a>',
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                  popupAnchor: [1, -34],
+                })
+              }
+            >
+              <Popup>
+             style={{
+                  backgroundColor: 'blue', // Cambia el color de fondo
+                  color: 'white', // Cambia el color del texto
+                }}
+                <p>Línea: {linea.route_short_name}</p>
+                <p>Destino: {linea.trip_headsign}</p>
+              </Popup>
+            </Marker>
+          ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
 
 
 /*import React, { useState, useEffect } from 'react';

@@ -27,7 +27,7 @@
     padding: .5%
 }
 
-.ciudad,.fecha-hora {
+.ciudad,.fecha-hora,.ciudad-transporte, .linea-colectivo-dropdown {
     background-color: #fff8dc;
     border: .25vh solid #ddd;
     border-radius: 5px;
@@ -163,5 +163,5 @@
 
 .leaflet-container {
     width: 100wh; 
-    height: 100vh;
+    height: 90vh;
   }
