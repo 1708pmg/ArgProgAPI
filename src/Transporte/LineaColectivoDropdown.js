@@ -1,15 +1,86 @@
 import React from 'react';
 
-const LineaColectivoDropdown = ({ lineas, onSelectLinea }) => {
-  // Ordena las líneas por el valor numérico
-  const lineasOrdenadas = [...lineas].sort((a, b) => {
-    // Extrae el valor numérico de la línea (eliminando la letra)
-    const numeroA = parseInt(a, 10);
-    const numeroB = parseInt(b, 10);
+const LineaColectivoDropdown = ({ lineas, onSelectLinea, lineasFiltradas }) => {
+  // Filtra las líneas según el array lineasFiltradas y las ordena por el número
+  const lineasMostradas = [...lineas]
+    .filter((linea) => lineasFiltradas.includes(linea)) // Filtra las líneas según el array lineasFiltradas
+    .sort((a, b) => {
+      // Extrae el número de la línea
+      // Convierte a número eliminando caracteres no numéricos
+      const numeroA = parseInt(a.replace(/\D/g, ''), 10); 
+      const numeroB = parseInt(b.replace(/\D/g, ''), 10);
 
-    // Compara los valores numéricos
-    return numeroA - numeroB;
-  });
+      // Compara los números para ordenar de menor a mayor
+      return numeroA - numeroB;
+    });
+
+  // Función que se ejecuta cuando se selecciona una línea
+  const handleChange = (event) => {
+    const selectedLinea = event.target.value;
+    onSelectLinea(selectedLinea);
+  };
+
+  // Componente de desplegable de líneas de colectivo
+  return (
+    <div className="linea-colectivo-dropdown">
+      <label htmlFor="lineaColectivo">Seleccionar línea de colectivo: </label>
+      <select id="lineaColectivo" onChange={handleChange}>
+        <option value="">Seleccionar</option>
+        {lineasMostradas.map((linea) => (
+          <option key={linea} value={linea}>
+            {linea}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+export default LineaColectivoDropdown;
+
+
+
+
+
+
+/*import React from 'react';
+
+const LineaColectivoDropdown = ({ lineas, onSelectLinea, lineasFiltradas }) => {
+  // Filtra las líneas según el array lineasFiltradas y las ordena
+  const lineasMostradas = [...lineas]
+    .filter((linea) => lineasFiltradas.includes(linea))
+    .sort((a, b) => b.localeCompare(a));
+    
+  const handleChange = (event) => {
+    const selectedLinea = event.target.value;
+    onSelectLinea(selectedLinea);
+  };
+
+  return (
+    <div className="linea-colectivo-dropdown">
+      <label htmlFor="lineaColectivo">Seleccionar línea de colectivo: </label>
+      <select id="lineaColectivo" onChange={handleChange}>
+        <option value="">Seleccionar</option>
+        {lineasMostradas.map((linea) => (
+          <option key={linea} value={linea}>
+            {linea}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+export default LineaColectivoDropdown;*/
+
+
+
+
+/*import React from 'react';
+
+const LineaColectivoDropdown = ({ lineas, onSelectLinea }) => {
+  // Ordena las líneas de mayor a menor
+  const lineasOrdenadas = [...lineas].sort((a, b) => b.localeCompare(a));
 
   const handleChange = (event) => {
     const selectedLinea = event.target.value;
@@ -31,8 +102,7 @@ const LineaColectivoDropdown = ({ lineas, onSelectLinea }) => {
   );
 };
 
-export default LineaColectivoDropdown;
-
+export default LineaColectivoDropdown;*/
 
 
 
