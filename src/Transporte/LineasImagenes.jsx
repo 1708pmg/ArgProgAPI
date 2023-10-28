@@ -10,7 +10,7 @@ import img124A from '../imagenesLineas/124A.jpg';
 import img132A from '../imagenesLineas/132A.jpg';
 import img148A from '../imagenesLineas/148A.jpg';
 
- // Relaciona las imagenes con las lineas de colectivo
+// Relaciona las imagenes con las lineas de colectivo
 const LineasImagenes = {
   '5A': img5A,
   '7B': img7B,
@@ -23,7 +23,7 @@ const LineasImagenes = {
   '132A': img132A,
   '148A': img148A,
 
-  
+
 };
 // Exporta el componente para su uso en otros lugares
 export default LineasImagenes;
