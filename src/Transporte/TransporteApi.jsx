@@ -1,9 +1,1092 @@
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import LineasImagenes from './LineasImagenes';
+
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [selectedLinea, setSelectedLinea] = useState('');
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLineasData, setSelectedLineasData] = useState([]);
+
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+    
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+  
+ useEffect(() => {
+    fetchTransportData(selectedLinea);
+  }, [selectedLinea]);
+
+  useEffect(() => {
+    if (selectedLinea && transportData) {
+      // Filtrar datos solo para la línea seleccionada
+      const selectedData = transportData.filter((linea) => linea.route_short_name === selectedLinea);
+      setSelectedLineasData(selectedData);
+    }
+  }, [transportData, selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {selectedLinea &&
+  selectedLineasData.map((linea) => (
+    <Marker
+      key={linea.route_id}
+      position={[linea.latitude, linea.longitude]}
+      icon={
+        L.divIcon({
+          className: 'my-custom-icon',
+          html: `<img src="${LineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+          iconSize: [50, 50],
+          iconAnchor: [50, 50],
+          popupAnchor: [1, -20],
+        })
+      }
+            >
+              <Popup>
+                <p>Línea: {linea.route_short_name}</p>
+                <p>Destino: {linea.trip_headsign}</p>
+              </Popup>
+            </Marker>
+          ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (selectedLinea) {
+      // Limpiar datos anteriores al seleccionar una nueva línea
+      setTransportData(null);
+      // Obtener datos para la línea seleccionada
+      fetchTransportData(selectedLinea);
+    }
+  }, [selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {transportData &&
+          transportData.map((linea) => (
+            // Mostrar marcadores solo para la línea seleccionada
+            selectedLinea === linea.route_short_name && (
+              <Marker
+                key={linea.route_id}
+                position={[linea.latitude, linea.longitude]}
+                icon={
+                  L.divIcon({
+                    className: 'my-custom-icon',
+                    html: `<img src="../imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                    iconSize: [25, 25],
+                    iconAnchor: [12, 12],
+                    popupAnchor: [1, -76]
+                  })
+                }
+              >
+                <Popup>
+                  <p>Línea: {linea.route_short_name}</p>
+                  <p>Destino: {linea.trip_headsign}</p>
+                </Popup>
+              </Marker>
+            )
+          ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (selectedLinea) {
+      // Limpiar datos anteriores al seleccionar una nueva línea
+      setTransportData(null);
+      // Obtener datos para la línea seleccionada
+      fetchTransportData(selectedLinea);
+    }
+  }, [selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {transportData &&
+          transportData.map((linea) => (
+            // Mostrar marcadores solo para la línea seleccionada
+            selectedLinea === linea.route_short_name && (
+              <Marker
+                key={linea.route_id}
+                position={[linea.latitude, linea.longitude]}
+                icon={
+                  L.divIcon({
+                    className: 'my-custom-icon',
+                    html: `<img src="../imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                    iconSize: [25, 25],
+                    iconAnchor: [12, 12],
+                    popupAnchor: [1, -76]
+                  })
+                }
+              >
+                <Popup>
+                  <p>Línea: {linea.route_short_name}</p>
+                  <p>Destino: {linea.trip_headsign}</p>
+                </Popup>
+              </Marker>
+            )
+          ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (selectedLinea) {
+      // Obtener datos para la línea seleccionada
+      fetchTransportData(selectedLinea);
+    }
+  }, [selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {transportData &&
+          transportData.map((linea) => (
+            // Mostrar marcadores solo para la línea seleccionada
+            selectedLinea === linea.route_short_name && (
+              <Marker
+                key={linea.route_id}
+                position={[linea.latitude, linea.longitude]}
+                icon={
+                  L.divIcon({
+                    className: 'my-custom-icon',
+                    html: `<img src="../imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                    iconSize: [25, 25],
+                    iconAnchor: [12, 12],
+                    popupAnchor: [1, -76]
+                  })
+                }
+              >
+                <Popup>
+                  <p>Línea: {linea.route_short_name}</p>
+                  <p>Destino: {linea.trip_headsign}</p>
+                </Popup>
+              </Marker>
+            )
+          ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+  const [selectedLineasData, setSelectedLineasData] = useState([]);
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (selectedLinea) {
+      // Limpiar datos anteriores al seleccionar una nueva línea
+      setSelectedLineasData([]);
+      // Obtener datos para la línea seleccionada
+      fetchTransportData(selectedLinea);
+    }
+  }, [selectedLinea]);
+
+  useEffect(() => {
+    if (selectedLinea && transportData) {
+      // Filtrar datos solo para la línea seleccionada
+      const selectedData = transportData.filter((linea) => linea.route_short_name === selectedLinea);
+      setSelectedLineasData(selectedData);
+    }
+  }, [transportData, selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {selectedLineasData.map((linea) => (
+          <Marker
+            key={linea.route_id}
+            position={[linea.latitude, linea.longitude]}
+            icon={
+              L.divIcon({
+                className: 'my-custom-icon',
+                html: `<img src="../imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                iconSize: [25, 25],
+                iconAnchor: [12, 12],
+                popupAnchor: [1, -76]
+              })
+            }
+          >
+            <Popup>
+              <p>Línea: {linea.route_short_name}</p>
+              <p>Destino: {linea.trip_headsign}</p>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+  const [selectedLineasData, setSelectedLineasData] = useState([]);
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    // Limpiar datos anteriores al seleccionar una nueva línea
+    setSelectedLineasData([]);
+    // Obtener datos para la línea seleccionada
+    fetchTransportData(selectedLinea);
+  }, [selectedLinea]);
+
+  useEffect(() => {
+    if (selectedLinea) {
+      // Filtrar datos solo para la línea seleccionada
+      const selectedData = transportData?.filter((linea) => linea.route_short_name === selectedLinea);
+      setSelectedLineasData(selectedData || []); // Usar [] si no hay datos
+    } else {
+      // Limpiar datos si no hay línea seleccionada
+      setSelectedLineasData([]);
+    }
+  }, [transportData, selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {selectedLineasData.map((linea) => (
+          <Marker
+            key={linea.route_id}
+            position={[linea.latitude, linea.longitude]}
+            icon={
+              L.divIcon({
+                className: 'my-custom-icon',
+                html: `<img src="../imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                iconSize: [25, 25],
+                iconAnchor: [12, 12],
+                popupAnchor: [1, -76]
+              })
+            }
+          >
+            <Popup>
+              <p>Línea: {linea.route_short_name}</p>
+              <p>Destino: {linea.trip_headsign}</p>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+  const [selectedLineasData, setSelectedLineasData] = useState([]);
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    // Limpiar datos anteriores al seleccionar una nueva línea
+    setSelectedLineasData([]);
+    // Obtener datos para la línea seleccionada
+    fetchTransportData(selectedLinea);
+  }, [selectedLinea]);
+
+  useEffect(() => {
+    if (selectedLinea) {
+      // Filtrar datos solo para la línea seleccionada
+      const selectedData = transportData?.filter((linea) => linea.route_short_name === selectedLinea);
+      setSelectedLineasData(selectedData);
+    }
+  }, [transportData, selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {selectedLineasData.map((linea) => (
+          <Marker
+            key={linea.route_id}
+            position={[linea.latitude, linea.longitude]}
+            icon={
+              L.divIcon({
+                className: 'my-custom-icon',
+                html: `<img src="../imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                iconSize: [25, 25],
+                iconAnchor: [12, 12],
+                popupAnchor: [1, -76]
+              })
+            }
+          >
+            <Popup>
+              <p>Línea: {linea.route_short_name}</p>
+              <p>Destino: {linea.trip_headsign}</p>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+// ... (import statements)
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+  const [selectedLineasData, setSelectedLineasData] = useState([]);
+
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData();
+    const intervalId = setInterval(fetchTransportData, 31000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    fetchTransportData(selectedLinea);
+  }, [selectedLinea]);
+
+  useEffect(() => {
+    if (selectedLinea) {
+      const selectedData = transportData?.filter((linea) => linea.route_short_name === selectedLinea);
+      setSelectedLineasData(selectedData || []); // Limpiar la selección anterior si no hay nuevos datos
+    } else {
+      setSelectedLineasData([]); // Limpiar la selección si no hay línea seleccionada
+    }
+  }, [transportData, selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {selectedLineasData.map((linea) => (
+          <Marker
+            key={linea.route_id}
+            position={[linea.latitude, linea.longitude]}
+            icon={
+              L.divIcon({
+                className: 'my-custom-icon',
+                html: `<img src="../imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                iconSize: [25, 25],
+                iconAnchor: [12, 12],
+                popupAnchor: [1, -76]
+              })
+            }
+          >
+            <Popup>
+              <p>Línea: {linea.route_short_name}</p>
+              <p>Destino: {linea.trip_headsign}</p>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+  const [lineasFiltradas, setLineasFiltradas] = useState([]);
+
+  const fetchTransportData = (linea) => {
+    let apiUrl = 'https://datosabiertos-transporte-apis.buenosaires.gob.ar:443/colectivos/vehiclePositionsSimple?client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+    
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!selectedLinea) {
+      // Si no hay línea seleccionada, no se cargan los datos de transporte
+      return;
+    }
+
+    fetchTransportData(selectedLinea);
+  }, [selectedLinea]);
+
+  useEffect(() => {
+    // Cuando cambian las líneas filtradas, se vuelve a cargar la información
+    fetchTransportData(selectedLinea);
+  }, [selectedLinea, lineasFiltradas]);
+
+  const position = [-34.603851, -58.381775];
+  let cityPosition = position;
+
+  const lineas = transportData ? Array.from(new Set(transportData.map((linea) => linea.route_short_name))) : [];
+
+  const busIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/1042/1042266.png',
+    iconSize: [25, 25],
+    iconAnchor: [12, 12],
+    popupAnchor: [1, -34],
+  });
+
+  const handleLineasFiltradasChange = (lineasSeleccionadas) => {
+    setLineasFiltradas(lineasSeleccionadas);
+  };
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+        onLineasFiltradasChange={handleLineasFiltradasChange}
+      />
+
+      {selectedLinea && (
+        <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Marker position={cityPosition}>
+            <Popup>Ciudad de Buenos Aires.</Popup>
+          </Marker>
+
+          {transportData
+            .filter((linea) => lineasFiltradas.includes(linea.route_short_name))
+            .map((linea) => (
+              <Marker
+                key={linea.route_id}
+                position={[linea.latitude, linea.longitude]}
+                icon={busIcon}
+              >
+                <Popup>
+                  <p>Línea: {linea.route_short_name}</p>
+                  <p>Destino: {linea.trip_headsign}</p>
+                </Popup>
+              </Marker>
+            ))}
+        </MapContainer>
+      )}
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
+import LineaColectivoDropdown from './LineaColectivoDropdown';
+import lineasImagenes from '../data/lineasImagenes.json';
+
+const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+
+const TransporteApi = () => {
+  const [transportData, setTransportData] = useState(null);
+  const [loadingTransport, setLoadingTransport] = useState(true);
+  const [selectedLinea, setSelectedLinea] = useState('');
+  
+  const fetchTransportData = (linea) => {
+    let apiUrl =
+      'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
+
+    if (linea) {
+      apiUrl += `&route_short_name=${linea}`;
+    }
+
+    fetch(apiUrl)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setTransportData(data);
+        setLoadingTransport(false);
+      })
+      .catch((ex) => {
+        console.error(ex);
+        setLoadingTransport(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTransportData(selectedLinea);
+    const intervalId = setInterval(() => fetchTransportData(selectedLinea), 31000);
+    return () => clearInterval(intervalId);
+  }, [selectedLinea]);
+
+  const position = [-34.603851, -58.381775];
+  const cityPosition = position;
+
+  if (loadingTransport) {
+    return <h1>Cargando datos de tránsito</h1>;
+  }
+
+  return (
+    <div className="transporte-container">
+      <h4 className="ciudad-transporte">Transporte en Ciudad de Buenos Aires</h4>
+
+      <LineaColectivoDropdown
+        lineas={lineasFiltradas}
+        onSelectLinea={setSelectedLinea}
+        lineasFiltradas={lineasFiltradas}
+      />
+
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={cityPosition}>
+          <Popup>Ciudad de Buenos Aires.</Popup>
+        </Marker>
+
+        {transportData?.map((linea) => (
+          <Marker
+            key={linea.route_id}
+            position={[linea.latitude, linea.longitude]}
+            icon={
+              L.divIcon({
+                className: 'my-custom-icon',
+                html: `<img src="./imagenesLineas/${lineasImagenes[linea.route_short_name]}" alt="${linea.route_short_name}" />`,
+                iconSize: [25, 25],
+                iconAnchor: [12, 12],
+                popupAnchor: [1, -34]
+              })
+            }
+          >
+            <Popup>
+              <p>Línea: {linea.route_short_name}</p>
+              <p>Destino: {linea.trip_headsign}</p>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
+  );
+};
+
+export default TransporteApi;*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 import LineaColectivoDropdown from './LineaColectivoDropdown';
@@ -99,7 +1182,7 @@ const TransporteApi = () => {
   );
 };
 
-export default TransporteApi;
+export default TransporteApi;*/
 
 /*import React, { useState, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -1067,7 +2150,7 @@ const TransporteApi = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {loadingTransport ? (
-          <p>Cargando datos de transporte...</p>
+         
         ) : (
           transportData && transportData.map((linea) => (
             <Marker
@@ -1118,7 +2201,7 @@ const TransporteApi = () => {
     // Realizar la primera solicitud al montar el componente
     fetchTransportData();
 
-    // Establecer un intervalo para actualizar cada 5 minutos
+    
     const intervalId = setInterval(fetchTransportData, 5 * 60 * 1000);
 
     // Limpiar el intervalo al desmontar el componente
