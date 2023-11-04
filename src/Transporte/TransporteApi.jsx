@@ -7,6 +7,7 @@ import LineasImagenes from './LineasImagenes';
 
 // Define las líneas de colectivo filtradas
 const lineasFiltradas = ['5A', '7B', '19A', '24A', '29A', '92A', '109A', '124A', '132A', '148A'];
+/*const lineasFiltradas = ['5', '7', '19', '24', '29', '92', '109', '124', '132', '168'];*/
 
 // Define el componente principal
 const TransporteApi = () => {
@@ -21,9 +22,9 @@ const TransporteApi = () => {
     let apiUrl =
       'https://apitransporte.buenosaires.gob.ar/colectivos/vehiclePositionsSimple?%20&client_id=cb6b18c84b3b484d98018a791577af52&client_secret=3e3DB105Fbf642Bf88d5eeB8783EE1E6';
 
-    if (linea) {
+    /*if (linea) {
       apiUrl += `&route_short_name=${linea}`;
-    }
+    }*/
 
     fetch(apiUrl)
       .then((resp) => resp.json())

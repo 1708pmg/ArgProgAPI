@@ -49,6 +49,786 @@ const DropdownItem = styled.li`
 `;
 
 function InfoCiudad({ weatherData, onLocationChange }) {
+  const [selectedCity, setSelectedCity] = useState('');
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  useEffect(() => {
+    // Manejar actualizaciones después de seleccionar una ciudad
+    if (selectedCity) {
+      const [name, country] = selectedCity.split(', ');
+      const selectedCityEntry = ciudadData.find(
+        (entry) => entry.name === name && entry.country === country
+      );
+
+      if (selectedCityEntry) {
+        onLocationChange(selectedCityEntry.latitude, selectedCityEntry.longitude);
+      }
+    }
+  }, [selectedCity, onLocationChange]);
+
+  const handleCityChange = (event) => {
+    const input = event.target.value;
+    setSelectedCity(input);
+
+    // Filtra ciudades que coinciden con la entrada del usuario
+    const filteredCities = ciudadData
+      .filter((entry) => entry.name.toLowerCase().startsWith(input.toLowerCase()))
+      .map((entry) => ({
+        name: entry.name,
+        country: entry.country,
+      }));
+
+    setFilteredCities(filteredCities);
+  };
+
+  const handleCitySelection = (city) => {
+    const selectedCityText = `${city.name}, ${city.country}`;
+    setSelectedCity(selectedCityText);
+  };
+
+  if (!weatherData || !weatherData.hourly || !weatherData.hourly.time) {
+    return <p>Datos meteorológicos no válidos</p>;
+  }
+
+  const fechaApi = new Date(weatherData.current.time);
+  const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);
+
+  return (
+    <>
+      <ClimaInfo className="ciudad">
+        <h3>Clima en {selectedCity || '...'}</h3>
+        <p>{`${formatoFecha}, ${formatoHora}`}</p>
+      </ClimaInfo>
+
+      <DropdownContainer>
+        <StyledLabel>Seleccione una ciudad:</StyledLabel>
+        <StyledInput
+          value={selectedCity}
+          onChange={handleCityChange}
+          placeholder="Escriba para buscar..."
+        />
+        {filteredCities.length > 0 && (
+          <DropdownList>
+            {filteredCities.map((city) => (
+              <DropdownItem key={`${city.name}-${city.country}`} onClick={() => handleCitySelection(city)}>
+                {`${city.name}, ${city.country}`}
+              </DropdownItem>
+            ))}
+          </DropdownList>
+        )}
+      </DropdownContainer>
+    </>
+  );
+}
+
+export default InfoCiudad;
+
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { formatearFechaYHora } from './formatearFechaYHora';
+import ciudadData from './ciudad.json';
+
+const ClimaInfo = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const DropdownContainer = styled.div`
+  position: relative;
+  width: 200px;
+  margin-bottom: 16px;
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+`;
+
+const DropdownList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: #fff;
+  z-index: 1;
+`;
+
+const DropdownItem = styled.li`
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+
+function InfoCiudad({ weatherData, onLocationChange }) {
+  const [selectedCity, setSelectedCity] = useState('');
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  const handleCityChange = (event) => {
+    const input = event.target.value;
+    setSelectedCity(input);
+
+    // Filtra ciudades que coinciden con la entrada del usuario
+    const filteredCities = ciudadData
+      .filter((entry) => entry.name.toLowerCase().startsWith(input.toLowerCase()))
+      .map((entry) => ({
+        name: entry.name,
+        country: entry.country,
+      }));
+
+    setFilteredCities(filteredCities);
+  };
+
+  const handleCitySelection = (city) => {
+   setSelectedCity(city.name);
+
+    // Extrae el nombre y el país de la opción seleccionada
+    //const [name, country] = city.split(', ');//
+
+    // Llama a la función proporcionada con la ubicación seleccionada
+    const selectedCityEntry = ciudadData.find(
+      (entry) => entry.name === city.name && entry.country === city.country
+    );
+
+    if (selectedCityEntry) {
+      onLocationChange(selectedCityEntry.latitude, selectedCityEntry.longitude);
+   // Establece el nombre de la ciudad seleccionada
+   setSelectedCity(`${city.name}, ${city.country}`);
+   }
+  };
+
+  if (!weatherData || !weatherData.hourly || !weatherData.hourly.time) {
+    return <p>Datos meteorológicos no válidos</p>;
+  }
+
+  const fechaApi = new Date(weatherData.current.time);
+  const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);
+
+  return (
+    <>
+      <ClimaInfo className="ciudad">
+        <h3>Clima en {selectedCity ? `${selectedCity}` : '...'}</h3>
+        <p>{`${formatoFecha}, ${formatoHora}`}</p>
+      </ClimaInfo>
+
+      <DropdownContainer>
+        <StyledLabel>Seleccione una ciudad:</StyledLabel>
+        <StyledInput
+          value={selectedCity}
+          onChange={handleCityChange}
+          placeholder="Escriba para buscar..."
+        />
+        {filteredCities.length > 0 && (
+          <DropdownList>
+            {filteredCities.map((city) => (
+              <DropdownItem key={`${city.name}-${city.country}`} onClick={() => handleCitySelection(city)}>
+                {`${city.name}, ${city.country}`}
+              </DropdownItem>
+            ))}
+          </DropdownList>
+        )}
+      </DropdownContainer>
+    </>
+  );
+}
+export default InfoCiudad;*/
+
+     /*<StyledLabel>Seleccione una ciudad:</StyledLabel>
+      <input
+        type="text"
+        value={selectedCity}
+        onChange={handleCityChange}
+        placeholder="Escriba para buscar..."
+      />
+      {filteredCities.length > 0 && (
+        <select
+          value={selectedCity}
+          onChange={(e) => handleCitySelection(e.target.value)}
+        >
+          <option value="" disabled hidden>
+            Seleccione una ciudad...
+          </option>
+          {filteredCities.map((city) => (
+            <option key={`${city.name}-${city.country}`} value={`${city.name}, ${city.country}`}>
+              {`${city.name}, ${city.country}`}
+            </option>
+          ))}
+        </select>
+      )}
+      {filteredCities.length > 0 && (
+        <DropdownList>
+          {filteredCities.map((city) => (
+            <DropdownItem
+              key={`${city.name}-${city.country}`}
+              onClick={() => handleCitySelection(`${city.name}, ${city.country}`)}
+            >
+              {`${city.name}, ${city.country}`}
+            </DropdownItem>
+          ))}
+        </DropdownList>
+      )}
+    </>
+  );
+}*/
+
+/*import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { formatearFechaYHora } from './formatearFechaYHora';
+import ciudadData from './ciudad.json';
+
+const ClimaInfo = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const DropdownContainer = styled.div`
+  position: relative;
+  width: 200px;
+  margin-bottom: 16px;
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+`;
+
+const DropdownList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: #fff;
+  z-index: 1;
+`;
+
+const DropdownItem = styled.li`
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+function InfoCiudad({ weatherData, onLocationChange }) {
+  const [selectedCity, setSelectedCity] = useState('');
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  const handleCityChange = (event) => {
+    const input = event.target.value;
+    setSelectedCity(input);
+
+    // Filtra ciudades que coinciden con la entrada del usuario
+    const filteredCities = ciudadData
+      .filter((entry) => entry.name.toLowerCase().startsWith(input.toLowerCase()))
+      .map((entry) => ({
+        name: entry.name,
+        country: entry.country,
+      }));
+
+    setFilteredCities(filteredCities);
+  };
+
+  const handleCitySelection = (city) => {
+    setSelectedCity(city.name);
+
+    // Llama a la función proporcionada con la ubicación seleccionada
+    const selectedCityEntry = ciudadData.find(
+      (entry) => entry.name === city.name && entry.country === city.country
+    );
+
+    if (selectedCityEntry) {
+      onLocationChange(selectedCityEntry.latitude, selectedCityEntry.longitude);
+    }
+  };
+
+  if (!weatherData || !weatherData.hourly || !weatherData.hourly.time) {
+    return <p>Datos meteorológicos no válidos</p>;
+  }
+
+  const fechaApi = new Date(weatherData.current.time);
+  const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);
+
+  return (
+    <>
+      <ClimaInfo className="ciudad">
+        <h3>Clima en {selectedCity ? `${selectedCity}` : '...'}</h3>
+        <p>{`${formatoFecha}, ${formatoHora}`}</p>
+      </ClimaInfo>
+
+      <DropdownContainer>
+        <StyledLabel>Seleccione una ciudad:</StyledLabel>
+        <StyledInput
+          value={selectedCity}
+          onChange={handleCityChange}
+          placeholder="Escriba para buscar..."
+        />
+        {filteredCities.length > 0 && (
+          <DropdownList>
+            {filteredCities.map((city) => (
+              <DropdownItem key={`${city.name}-${city.country}`} onClick={() => handleCitySelection(city)}>
+                {`${city.name}, ${city.country}`}
+              </DropdownItem>
+            ))}
+          </DropdownList>
+        )}
+      </DropdownContainer>
+    </>
+  );
+}
+
+export default InfoCiudad;*/
+
+/*import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { formatearFechaYHora } from './formatearFechaYHora';
+import ciudadData from './ciudad.json';
+
+const ClimaInfo = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const StyledSelect = styled.select`
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+`;
+
+const DropdownList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: #fff;
+  z-index: 1;
+`;
+
+const DropdownItem = styled.li`
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+function InfoCiudad({ weatherData, onLocationChange }) {
+  const [selectedCity, setSelectedCity] = useState('');
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  const handleCityChange = (event) => {
+    const input = event.target.value;
+    setSelectedCity(input);
+
+    // Filtra ciudades que coinciden con la entrada del usuario
+    const filteredCities = ciudadData
+      .filter((entry) => entry.name.toLowerCase().startsWith(input.toLowerCase()))
+      .map((entry) => ({
+        name: entry.name,
+        country: entry.country,
+      }));
+
+    setFilteredCities(filteredCities);
+  };
+
+  const handleCitySelection = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedCity(selectedValue);
+
+    // Extrae el nombre y el país de la opción seleccionada
+    const [name, country] = selectedValue.split(', ');
+
+    // Llama a la función proporcionada con la ubicación seleccionada
+    const selectedCityEntry = ciudadData.find(
+      (entry) => entry.name === name && entry.country === country
+    );
+
+    if (selectedCityEntry) {
+      onLocationChange(selectedCityEntry.latitude, selectedCityEntry.longitude);
+    }
+  };
+
+  if (!weatherData || !weatherData.hourly || !weatherData.hourly.time) {
+    return <p>Datos meteorológicos no válidos</p>;
+  }
+
+  const fechaApi = new Date(weatherData.current.time);
+  const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);
+
+  return (
+    <>
+      <ClimaInfo className="ciudad">
+        <h3>Clima en {selectedCity ? `${selectedCity}` : '...'}</h3>
+        <p>{`${formatoFecha}, ${formatoHora}`}</p>
+      </ClimaInfo>
+
+      <StyledLabel>Seleccione una ciudad:</StyledLabel>
+      <input
+        type="text"
+        value={selectedCity}
+        onChange={handleCityChange}
+        placeholder="Escriba para buscar..."
+      />
+      {filteredCities.length > 0 && (
+        <select
+          value={selectedCity}
+          onChange={handleCitySelection}
+        >
+          <option value="" disabled hidden>
+            Seleccione una ciudad...
+          </option>
+          {filteredCities.map((city) => (
+            <option key={`${city.name}-${city.country}`} value={`${city.name}, ${city.country}`}>
+              {`${city.name}, ${city.country}`}
+            </option>
+          ))}
+        </select>
+      )}
+    </>
+  );
+}
+
+export default InfoCiudad;*/
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { formatearFechaYHora } from './formatearFechaYHora';
+import ciudadData from './ciudad.json';
+
+const ClimaInfo = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const StyledSelect = styled.select`
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+`;
+
+const DropdownList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: #fff;
+  z-index: 1;
+`;
+
+const DropdownItem = styled.li`
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+function InfoCiudad({ weatherData, onLocationChange }) {
+  const [selectedCity, setSelectedCity] = useState('');
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  const handleCityChange = (event) => {
+    const input = event.target.value;
+    setSelectedCity(input);
+
+    // Filtra ciudades que coinciden con la entrada del usuario
+    const filteredCities = ciudadData
+      .filter((entry) => entry.name.toLowerCase().startsWith(input.toLowerCase()))
+      .map((entry) => ({
+        name: entry.name,
+        country: entry.country,
+      }));
+
+    setFilteredCities(filteredCities);
+  };
+
+  const handleCitySelection = (city) => {
+    setSelectedCity(city.name);
+
+    // Llama a la función proporcionada con la ubicación seleccionada
+    const selectedCityEntry = ciudadData.find(
+      (entry) => entry.name === city.name && entry.country === city.country
+    );
+
+    if (selectedCityEntry) {
+      onLocationChange(selectedCityEntry.latitude, selectedCityEntry.longitude);
+    }
+  };
+
+  if (!weatherData || !weatherData.hourly || !weatherData.hourly.time) {
+    return <p>Datos meteorológicos no válidos</p>;
+  }
+
+  const fechaApi = new Date(weatherData.current.time);
+  const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);
+
+  return (
+    <>
+      <ClimaInfo className="ciudad">
+        <h3>Clima en {selectedCity ? `${selectedCity}` : '...'}</h3>
+        <p>{`${formatoFecha}, ${formatoHora}`}</p>
+      </ClimaInfo>
+
+      <StyledLabel>Seleccione una ciudad:</StyledLabel>
+      <StyledInput
+        value={selectedCity}
+        onChange={handleCityChange}
+      >
+        <option value="" disabled hidden>
+          Escriba para buscar...
+        </option>
+        {filteredCities.map((city) => (
+          <option key={`${city.name}-${city.country}`} value={`${city.name}, ${city.country}`}>
+            {`${city.name}, ${city.country}`}
+          </option>
+        ))}
+      </StyledInput>
+      {filteredCities.length > 0 && (
+        <DropdownList>
+          {filteredCities.map((city) => (
+            <DropdownItem key={`${city.name}-${city.country}`} onClick={() => handleCitySelection(city)}>
+              {`${city.name}, ${city.country}`}
+            </DropdownItem>
+          ))}
+        </DropdownList>
+      )}
+    </>
+  );
+}
+
+export default InfoCiudad;*/
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { formatearFechaYHora } from './formatearFechaYHora';
+import ciudadData from './ciudad.json';
+
+const ClimaInfo = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const DropdownContainer = styled.div`
+  position: relative;
+  width: 200px;
+  margin-bottom: 16px;
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+`;
+
+const DropdownList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: #fff;
+  z-index: 1;
+`;
+
+const DropdownItem = styled.li`
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+function InfoCiudad({ weatherData, onLocationChange }) {
+  const [selectedCity, setSelectedCity] = useState('');
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  const handleCityChange = (event) => {
+    const input = event.target.value;
+    setSelectedCity(input);
+
+    // Filtra ciudades que coinciden con la entrada del usuario
+    const filteredCities = ciudadData
+      .filter((entry) => entry.name.toLowerCase().startsWith(input.toLowerCase()))
+      .map((entry) => ({
+        name: entry.name,
+        country: entry.country,
+      }));
+
+    setFilteredCities(filteredCities);
+  };
+
+  const handleCitySelection = (city) => {
+    setSelectedCity(city.name);
+
+    // Llama a la función proporcionada con la ubicación seleccionada
+    const selectedCityEntry = ciudadData.find(
+      (entry) => entry.name === city.name && entry.country === city.country
+    );
+
+    if (selectedCityEntry) {
+      onLocationChange(selectedCityEntry.latitude, selectedCityEntry.longitude);
+    }
+  };
+
+  if (!weatherData || !weatherData.hourly || !weatherData.hourly.time) {
+    return <p>Datos meteorológicos no válidos</p>;
+  }
+
+  const fechaApi = new Date(weatherData.current.time);
+  const { formatoFecha, formatoHora } = formatearFechaYHora(fechaApi);
+
+  return (
+    <>
+      <ClimaInfo className="ciudad">
+        <h3 >Clima en {selectedCity ? `${selectedCity}` : '...'}</h3>
+        <p >{`${formatoFecha}, ${formatoHora}`}</p>
+      </ClimaInfo>
+      
+
+      <DropdownContainer>
+        <StyledLabel >Seleccione una ciudad:</StyledLabel>
+        <StyledInput
+          value={selectedCity}
+          onChange={handleCityChange}
+          placeholder="Escriba para buscar..."
+        />
+        {filteredCities.length > 0 && (
+          <DropdownList>
+            {filteredCities.map((city) => (
+              <DropdownItem key={`${city.name}-${city.country}`} onClick={() => handleCitySelection(city)}>
+                {`${city.name}, ${city.country}`}
+              </DropdownItem>
+            ))}
+          </DropdownList>
+        )}
+      </DropdownContainer>
+    </>
+  );
+}
+
+export default InfoCiudad;*/
+
+
+
+
+/*import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { formatearFechaYHora } from './formatearFechaYHora';
+import ciudadData from './ciudad.json';
+
+const ClimaInfo = styled.div`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const DropdownContainer = styled.div`
+  position: relative;
+  width: 200px;
+  margin-bottom: 16px;
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+`;
+
+const DropdownList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background-color: #fff;
+  z-index: 1;
+`;
+
+const DropdownItem = styled.li`
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+function InfoCiudad({ weatherData, onLocationChange }) {
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
@@ -173,7 +953,7 @@ function InfoCiudad({ weatherData, onLocationChange }) {
   );
 }
 
-export default InfoCiudad;
+export default InfoCiudad;*/
 
 
 

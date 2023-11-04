@@ -46,7 +46,7 @@ function Clima() {
   return (
     <div className="clima-container">
     
-      <InfoCiudad weatherData={weatherData} onLocationChange={handleLocationChange} />
+      <InfoCiudad weatherData={weatherData} setWeatherData={setWeatherData} onLocationChange={handleLocationChange} />
       <InfoGeneralClima weatherData={weatherData} />
       <InfoDetalladaClima weatherData={weatherData} />
       <SalidaPuestaSol weatherData={weatherData} />
