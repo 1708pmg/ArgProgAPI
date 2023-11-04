@@ -7,10 +7,12 @@ import InfoGeneralClima from './InfoGeneralClima';
 import SalidaPuestaSol from './SalidaPuestaSol';
 import TemperaturaMinMax from './TemperaturaMinMax';
 import TemperaturaPorHora from './TemperaturaPorHora';
+import ciudadData from './ciudad.json';
 
 function Clima() {
   const [weatherData, setWeatherData] = useState(null);
   const [loadingWeather, setLoadingWeather] = useState(true);
+  const [selectedCity, setSelectedCity] = useState('');
 
   const fetchWeatherData = (latitude, longitude) => {
     setLoadingWeather(true);
@@ -29,15 +31,26 @@ function Clima() {
       });
   };
 
-  const handleLocationChange = (latitude, longitude) => {
-    // Actualiza los datos meteorológicos cuando cambia la ubicación
-    fetchWeatherData(latitude, longitude);
-  };
+ 
 
   useEffect(() => {
     // Llamada inicial para cargar datos meteorológicos con ubicación predeterminada
     fetchWeatherData(-34.6131, -58.3772);
   }, []);
+
+  useEffect(() => {
+    // Manejar actualizaciones después de seleccionar una ciudad
+    if (selectedCity) {
+      const [name, country] = selectedCity.split(', ');
+      const selectedCityEntry = ciudadData.find(
+        (entry) => entry.name === name && entry.country === country
+      );
+
+      if (selectedCityEntry) {
+        fetchWeatherData(selectedCityEntry.latitude, selectedCityEntry.longitude);
+      }
+    }
+  }, [selectedCity]);
 
   if (loadingWeather) {
     return <h1>Cargando datos meteorológicos</h1>;
@@ -46,7 +59,7 @@ function Clima() {
   return (
     <div className="clima-container">
     
-      <InfoCiudad weatherData={weatherData} setWeatherData={setWeatherData} onLocationChange={handleLocationChange} />
+      <InfoCiudad weatherData={weatherData} selectedCity={selectedCity} setSelectedCity={setSelectedCity}/>
       <InfoGeneralClima weatherData={weatherData} />
       <InfoDetalladaClima weatherData={weatherData} />
       <SalidaPuestaSol weatherData={weatherData} />

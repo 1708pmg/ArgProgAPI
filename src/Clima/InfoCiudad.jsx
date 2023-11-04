@@ -48,29 +48,16 @@ const DropdownItem = styled.li`
   }
 `;
 
-function InfoCiudad({ weatherData, onLocationChange }) {
-  const [selectedCity, setSelectedCity] = useState('');
+function InfoCiudad({ weatherData, selectedCity,setSelectedCity}) {
   const [filteredCities, setFilteredCities] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
-  useEffect(() => {
-    // Manejar actualizaciones después de seleccionar una ciudad
-    if (selectedCity) {
-      const [name, country] = selectedCity.split(', ');
-      const selectedCityEntry = ciudadData.find(
-        (entry) => entry.name === name && entry.country === country
-      );
-
-      if (selectedCityEntry) {
-        onLocationChange(selectedCityEntry.latitude, selectedCityEntry.longitude);
-      }
-    }
-  }, [selectedCity, onLocationChange]);
+  
 
   const handleCityChange = (event) => {
     const input = event.target.value;
-    setSelectedCity(input);
-
-    // Filtra ciudades que coinciden con la entrada del usuario
+    setInputValue (input)
+    //iltra ciudades que coinciden con la entrada del usuario
     const filteredCities = ciudadData
       .filter((entry) => entry.name.toLowerCase().startsWith(input.toLowerCase()))
       .map((entry) => ({
@@ -103,14 +90,14 @@ function InfoCiudad({ weatherData, onLocationChange }) {
       <DropdownContainer>
         <StyledLabel>Seleccione una ciudad:</StyledLabel>
         <StyledInput
-          value={selectedCity}
+          value={inputValue}
           onChange={handleCityChange}
           placeholder="Escriba para buscar..."
         />
         {filteredCities.length > 0 && (
           <DropdownList>
-            {filteredCities.map((city) => (
-              <DropdownItem key={`${city.name}-${city.country}`} onClick={() => handleCitySelection(city)}>
+            {filteredCities.map((city,index) => (
+              <DropdownItem key={index} onClick={() => handleCitySelection(city)}>
                 {`${city.name}, ${city.country}`}
               </DropdownItem>
             ))}
@@ -132,7 +119,6 @@ import styled from 'styled-components';
 import { formatearFechaYHora } from './formatearFechaYHora';
 import ciudadData from './ciudad.json';
 
-const ClimaInfo = styled.div`
   text-align: center;
   margin-bottom: 16px;
 `;
