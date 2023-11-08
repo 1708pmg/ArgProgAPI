@@ -8,9 +8,9 @@ function App() {
     <div className="App">
       {/* Sección para mostrar el clima */}
       <div className="clima-container">
-
         <Clima />
       </div>
+      
       {/* Sección para mostrar el transporte */}
       <div className="transporte-container">
         <TransporteApi />
