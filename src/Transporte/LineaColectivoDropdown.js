@@ -1,3 +1,65 @@
+import React from 'react';
+
+const LineaColectivoDropdown = ({ lineas, onSelectLinea, destinos, onSelectDestino, agencias, onSelectAgencia}) => {
+  
+
+  const handleChange = (event) => {
+    const selectedLinea = event.target.value;
+    onSelectLinea(selectedLinea);
+    onSelectDestino('');
+    onSelectAgencia('');
+
+  };
+
+  const handleDestinoChange = (event) => {
+    const destino = event.target.value;
+    //setSelectedDestino(destino);//
+    onSelectDestino(destino);
+  };
+
+  const handleAgenciaChange = (event) => {
+    const agencia = event.target.value;
+    //setSelectedAgencia(agencia);//
+    onSelectAgencia(agencia);
+  };
+
+  return (
+    <div className="linea-colectivo-dropdown">
+      <label htmlFor="lineaColectivo">Seleccionar línea de colectivo: </label>
+      <select id="lineaColectivo" onChange={handleChange}>
+        <option value="">Seleccionar</option>
+        {lineas.map((linea) => (
+          <option key={linea} value={linea}>
+            {linea}
+          </option>
+        ))}
+      </select>
+
+      <label htmlFor="destino">Seleccionar destino: </label>
+      <select id="destino" onChange={handleDestinoChange} disabled={!destinos.length}>
+        <option value="">Seleccionar</option>
+        {destinos.map((destino) => (
+          <option key={destino} value={destino}>
+            {destino}
+          </option>
+        ))}
+      </select>
+
+      <label htmlFor="agencia">Seleccionar agencia: </label>
+      <select id="agencia" onChange={handleAgenciaChange} disabled={!agencias.length}>
+        <option value="">Seleccionar</option>
+        {agencias.map((agencia) => (
+          <option key={agencia} value={agencia}>
+            {agencia}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+export default LineaColectivoDropdown;
+
 /*import React, { useState } from 'react';
 import Select from 'react-select';
 
@@ -89,7 +151,7 @@ const LineaColectivoDropdown = ({ lineas, onSelectLinea, onSelectRecorrido, onSe
 
 export default LineaColectivoDropdown;*/
 
-import React from 'react';
+/*import React from 'react';
 
 const LineaColectivoDropdown = ({ lineas, onSelectLinea, lineasFiltradas }) => {
   // Filtra las líneas según el array lineasFiltradas y las ordena por el número
@@ -128,7 +190,7 @@ const LineaColectivoDropdown = ({ lineas, onSelectLinea, lineasFiltradas }) => {
   );
 };
 
-export default LineaColectivoDropdown;
+export default LineaColectivoDropdown;*/
 
 
 

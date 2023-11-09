@@ -23,7 +23,6 @@ const LineasImagenes = {
   '132A': img132A,
   '148A': img148A,
 
-
 };
 // Exporta el componente para su uso en otros lugares
 export default LineasImagenes;
