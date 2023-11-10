@@ -63,21 +63,21 @@ const TransporteApi = () => {
     }
   }, [transportData, selectedLinea, selectedDestino, selectedAgencia]);
 
-// Efecto para filtrar destinos y agencias únicas de las líneas seleccionadas
-useEffect(() => {
-  if (transportData) { // Verificar si transportData no es null
-    const destinosFiltrados = [...new Set(transportData
-      .filter((linea) => lineasFiltradas.includes(linea.route_short_name))
-      .map((linea) => linea.trip_headsign)
-    )];
-    setDestinos(destinosFiltrados);
+  // Efecto para filtrar destinos y agencias únicas de las líneas seleccionadas
+  useEffect(() => {
+    if (transportData) { // Verificar si transportData no es null
+      const destinosFiltrados = [...new Set(transportData
+        .filter((linea) => lineasFiltradas.includes(linea.route_short_name))
+        .map((linea) => linea.trip_headsign)
+      )];
+      setDestinos(destinosFiltrados);
 
-    const agenciasFiltradas = [...new Set(transportData
-      .filter((linea) => lineasFiltradas.includes(linea.route_short_name))
-      .map((linea) => linea.agency_name)
-    )];
-    setAgencias(agenciasFiltradas);
-  }
+      const agenciasFiltradas = [...new Set(transportData
+        .filter((linea) => lineasFiltradas.includes(linea.route_short_name))
+        .map((linea) => linea.agency_name)
+      )];
+      setAgencias(agenciasFiltradas);
+    }
   }, [transportData]);
 
   // Define la posición inicial y la posición de la ciudad
@@ -268,20 +268,20 @@ const TransporteApi = () => {
         </Marker>
 
         {selectedLinea &&
-          selectedLineasData.map((linea, index) => (
-            <Marker
-              key={index}
-              position={[linea.latitude, linea.longitude]}
-              icon={
-                new L.Icon({
-                  iconRetinaUrl: LineasImagenes[linea.route_short_name],
-                  iconUrl: LineasImagenes[linea.route_short_name],
-                  popupAnchor: [-0, -0],
-                  iconSize: [32, 45],
-                })
-              }
-            >
-              <Popup>
+  selectedLineasData.map((linea, index) => (
+    <Marker
+      key={index}
+      position={[linea.latitude, linea.longitude]}
+      icon={
+        new L.Icon({
+          iconRetinaUrl: obtenerImagen(linea.route_short_name, linea.trip_headsign, linea.agency_name),
+          iconUrl: obtenerImagen(linea.route_short_name, linea.trip_headsign, linea.agency_name),
+          popupAnchor: [-0, -0],
+          iconSize: [32, 45],
+        })
+      }
+    >
+        <Popup>
                 <p>Línea: {linea.route_short_name}</p>
                 <p>Destino: {linea.trip_headsign}</p>
                 <p>Agencia: {linea.agency_name}</p>
@@ -561,20 +561,20 @@ const TransporteApi = () => {
           <Popup>Ciudad de Buenos Aires.</Popup>
         </Marker>
 
-        {selectedLinea &&
-          selectedLineasData.map((linea, index) => (
-            <Marker
-              key={index}
-              position={[linea.latitude, linea.longitude]}
-              icon={
-                new L.Icon({
-                  iconRetinaUrl: LineasImagenes[linea.route_short_name],
-                  iconUrl: LineasImagenes[linea.route_short_name],
-                  popupAnchor: [-0, -0],
-                  iconSize: [32, 45],
-                })
-              }
-            >
+       {selectedLinea &&
+  selectedLineasData.map((linea, index) => (
+    <Marker
+      key={index}
+      position={[linea.latitude, linea.longitude]}
+      icon={
+        new L.Icon({
+          iconRetinaUrl: obtenerImagen(linea.route_short_name, linea.trip_headsign, linea.agency_name),
+          iconUrl: obtenerImagen(linea.route_short_name, linea.trip_headsign, linea.agency_name),
+          popupAnchor: [-0, -0],
+          iconSize: [32, 45],
+        })
+      }
+    >
               <Popup>
                 <p>Línea: {linea.route_short_name}</p>
                 <p>Destino: {linea.trip_headsign}</p>

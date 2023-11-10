@@ -18,7 +18,8 @@ En el caso Calidad Aire, lo he dejado estático porque la APi Open meteo, no lo 
 Se me han presentado muchos problemas al pasar por Props la data de Api. Se rompió muchas veces el codigo. El mayor problema se presentó en el formateo de la fecha y la hora porque baje una biblioteca y al no saberla usar correctamente se me rompió todo el codigo. Al no poder resolverlo, volvi a la commit anterior y empece nuevamente. 
 
 ### Mejoras y desmejoras
-Agregue la opcion con un select para elegir distintas ciudades a traves de un archivo JSON.Cuando el usuario escribe una letra se despliegan los nombre de las ciudades que comienzan con dicha letra.  Al agregar esta opcion se modificó el tamaño del dashborard y no lo pude solucionar por tiempo.
+- Agregue la opcion con un select para elegir distintas ciudades a traves de un archivo JSON.Cuando el usuario escribe una letra se despliegan los nombre de las ciudades que comienzan con dicha letra.  Al agregar esta opcion se modificó el tamaño del dashborard y no lo pude solucionar por tiempo.
+- Entrego el codigo sucio, porque quiero seguir trabajando y no perder los intentos de mejorar.
 
 ### Puntos a mejorar en App Clima
 + *Mejorar la estética en CSS.*
@@ -43,15 +44,17 @@ Se presentaron distintos problemas:
 
 - Instale dos veces por error la biblioteca select-react y se me rompio todo. Mi ayudante Neheun Rognone (con infinita paciencia) me ayudó a hacer una rama con el error y luedo clonar el repo. No puedo explicar como lo realizamos porque solo segui las instrucciones y sin bien me iba explicando cada paso dado, no llegué a asimilar los conceptos. Me queda como enseñanza no querer incursionar con una biblioteca nueva sin informarme antes somo se usa correctamente. Luego que solucionamos el problema y tenia nuevamente mi trabajo como para continuar decide no usar la bibliote selet-react y seguir con los conocimientos que ya tengo. 
 
-### Mejoras y desmejoras
-- Mejoras : tenia el selector de colectivos por numero de linea e incorpore dos select mas, uno para que el usuario eleja por destino y otro por agencia. Solo estan selecionadas las agencias y los destinos a las lineas filtradas y no a la informacion total que ofrece la Api
-- Desmejoras: Lo que agregué no funciona. No puedo hacer que se vea la imagen del marcador en el mapa del numero del colectivo cuando se selecciona por destino o por agencia. Solo se ve el marcador cuando selecciono la linea. Esteticamente es feo y desordenado y no me alcanzo el tiempo para mejorarlo. 
+### Mejoras y desmejoras Transporte
+- Mejoras : tenia el selector de colectivos por numero de linea e incorpore dos selectores mas, uno para que el usuario elija por destino y otro por agencia. Solo estan selecionadas las agencias y los destinos a las lineas filtradas y no a la informacion total que ofrece la Api
+- Desmejoras: Lo que agregué no funciona y ademas me doy cuenta que no aporta demasiado al usuario. No puedo hacer que se vea la imagen del marcador en el mapa del numero del colectivo cuando se selecciona por destino o por agencia. Solo se ve el marcador cuando selecciono la linea. Esteticamente es feo y desordenado y no me alcanzo el tiempo para mejorarlo. 
+- Entrego el codigo sucio, porque quiero seguir trabajando y no perder los intentos de mejorar.
 
 ### Puntos a mejorar en App Transporte.
 + *Trabajar mejor el CSS.*
 + *Darle mejor estilo al dropdown y las imagenes de los colectivos*
 + *Organizar mejor los componentes en las carpetas para que todo quede mas limpio y ordenado*
 + *Profundizar en como estructurar los comentarios y realizar el Readme con MarkDown.*
++ *Profndizar y afianzar Los conceptos javascript, CSS y React*
 
 ### Conclusión
 Si bien me ha costado y sigue costando la comprension y lógica de los códigos, hay mucho por aprender y mejorar. Y no claudicar en el intento. Agradezco a los profesores y ayudantes por la disposicion, dedicacion y tiempo extra fuera de los horarios de clase para solucionar todos los problemas que se han presentado. Excelente experiencia.

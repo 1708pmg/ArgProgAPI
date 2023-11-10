@@ -1,7 +1,7 @@
 import React from 'react';
 
-const LineaColectivoDropdown = ({ lineas, onSelectLinea, destinos, onSelectDestino, agencias, onSelectAgencia}) => {
-  
+const LineaColectivoDropdown = ({ lineas, onSelectLinea, destinos, onSelectDestino, agencias, onSelectAgencia }) => {
+
 
   const handleChange = (event) => {
     const selectedLinea = event.target.value;
